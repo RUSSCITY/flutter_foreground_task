@@ -12,8 +12,9 @@ data class ForegroundTaskOptions(
 ) {
     companion object {
         fun getData(context: Context): ForegroundTaskOptions {
-            val prefs = context.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+            val prefs = context.applicationContext.getSharedPreferences(
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+            )
 
             val interval = prefs.getLong(PrefsKey.TASK_INTERVAL, 5000L)
             val autoRunOnBoot = prefs.getBoolean(PrefsKey.AUTO_RUN_ON_BOOT, false)
@@ -39,15 +40,16 @@ data class ForegroundTaskOptions(
         }
 
         fun putData(context: Context, map: Map<*, *>?) {
-            val prefs = context.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+            val prefs = context.applicationContext.getSharedPreferences(
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+            )
 
             val interval = "${map?.get(PrefsKey.TASK_INTERVAL)}".toLongOrNull() ?: 5000L
             val autoRunOnBoot = map?.get(PrefsKey.AUTO_RUN_ON_BOOT) as? Boolean ?: false
             val allowWifiLock = map?.get(PrefsKey.ALLOW_WIFI_LOCK) as? Boolean ?: false
             val callbackHandle = "${map?.get(PrefsKey.CALLBACK_HANDLE)}".toLongOrNull()
 
-            with (prefs.edit()) {
+            with(prefs.edit()) {
                 putLong(PrefsKey.TASK_INTERVAL, interval)
                 putBoolean(PrefsKey.AUTO_RUN_ON_BOOT, autoRunOnBoot)
                 putBoolean(PrefsKey.ALLOW_WIFI_LOCK, allowWifiLock)
@@ -62,12 +64,13 @@ data class ForegroundTaskOptions(
         }
 
         fun updateCallbackHandle(context: Context, map: Map<*, *>?) {
-            val prefs = context.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+            val prefs = context.applicationContext.getSharedPreferences(
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+            )
 
             val callbackHandle = "${map?.get(PrefsKey.CALLBACK_HANDLE)}".toLongOrNull()
 
-            with (prefs.edit()) {
+            with(prefs.edit()) {
                 remove(PrefsKey.CALLBACK_HANDLE)
                 if (callbackHandle != null) {
                     putLong(PrefsKey.CALLBACK_HANDLE, callbackHandle)
@@ -78,10 +81,11 @@ data class ForegroundTaskOptions(
         }
 
         fun clearData(context: Context) {
-            val prefs = context.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+            val prefs = context.applicationContext.getSharedPreferences(
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+            )
 
-            with (prefs.edit()) {
+            with(prefs.edit()) {
                 clear()
                 commit()
             }
