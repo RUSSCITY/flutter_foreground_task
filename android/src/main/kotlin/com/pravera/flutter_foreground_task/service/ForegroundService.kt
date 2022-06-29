@@ -90,8 +90,8 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        fetchDataFromPreferences()
         preStartNotification()
+        fetchDataFromPreferences()
 
         when (foregroundServiceStatus.action) {
             ForegroundServiceAction.UPDATE -> {
@@ -254,53 +254,55 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
     }
 
     private fun preStartNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                notificationOptions.channelId,
-                notificationOptions.channelName,
-                notificationOptions.channelImportance
-            )
-            channel.description = notificationOptions.channelDescription
-            channel.enableVibration(notificationOptions.enableVibration)
-            if (!notificationOptions.playSound) {
-                channel.setSound(null, null)
-            }
-            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nm.createNotificationChannel(channel)
+        if (this::notificationOptions.isInitialized) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    notificationOptions.channelId,
+                    notificationOptions.channelName,
+                    notificationOptions.channelImportance
+                )
+                channel.description = notificationOptions.channelDescription
+                channel.enableVibration(notificationOptions.enableVibration)
+                if (!notificationOptions.playSound) {
+                    channel.setSound(null, null)
+                }
+                val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                nm.createNotificationChannel(channel)
 
-            val builder = Notification.Builder(this, notificationOptions.channelId)
-            builder.setOngoing(true)
-            builder.setShowWhen(notificationOptions.showWhen)
-            builder.setContentTitle(notificationOptions.contentTitle)
-            builder.setContentText(notificationOptions.contentText)
-            builder.setVisibility(notificationOptions.visibility)
-            for (action in buildButtonActions()) {
-                builder.addAction(action)
+                val builder = Notification.Builder(this, notificationOptions.channelId)
+                builder.setOngoing(true)
+                builder.setShowWhen(notificationOptions.showWhen)
+                builder.setContentTitle(notificationOptions.contentTitle)
+                builder.setContentText(notificationOptions.contentText)
+                builder.setVisibility(notificationOptions.visibility)
+                for (action in buildButtonActions()) {
+                    builder.addAction(action)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    builder.setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_IMMEDIATE)
+                }
+                startForeground(notificationOptions.serviceId, builder.build())
+            } else {
+                val builder = NotificationCompat.Builder(this, notificationOptions.channelId)
+                builder.setOngoing(true)
+                builder.setShowWhen(notificationOptions.showWhen)
+                builder.setContentTitle(notificationOptions.contentTitle)
+                builder.setContentText(notificationOptions.contentText)
+                builder.setVisibility(notificationOptions.visibility)
+                if (!notificationOptions.enableVibration) {
+                    builder.setVibrate(longArrayOf(0L))
+                }
+                if (!notificationOptions.playSound) {
+                    builder.setSound(null)
+                }
+                builder.priority = notificationOptions.priority
+                for (action in buildButtonCompatActions()) {
+                    builder.addAction(action)
+                }
+                startForeground(notificationOptions.serviceId, builder.build())
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                builder.setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_IMMEDIATE)
-            }
-            startForeground(notificationOptions.serviceId, builder.build())
-        } else {
-            val builder = NotificationCompat.Builder(this, notificationOptions.channelId)
-            builder.setOngoing(true)
-            builder.setShowWhen(notificationOptions.showWhen)
-            builder.setContentTitle(notificationOptions.contentTitle)
-            builder.setContentText(notificationOptions.contentText)
-            builder.setVisibility(notificationOptions.visibility)
-            if (!notificationOptions.enableVibration) {
-                builder.setVibrate(longArrayOf(0L))
-            }
-            if (!notificationOptions.playSound) {
-                builder.setSound(null)
-            }
-            builder.priority = notificationOptions.priority
-            for (action in buildButtonCompatActions()) {
-                builder.addAction(action)
-            }
-            startForeground(notificationOptions.serviceId, builder.build())
+            isRunningService = true
         }
-        isRunningService = true
     }
 
     private fun stopForegroundService() {
