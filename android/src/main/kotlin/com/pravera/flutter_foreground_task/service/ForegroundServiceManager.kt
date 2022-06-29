@@ -102,8 +102,8 @@ class ForegroundServiceManager {
         try {
             val nIntent = Intent(context, ForegroundService::class.java)
             ForegroundServiceStatus.putData(context, ForegroundServiceAction.STOP)
-            ForegroundTaskOptions.clearData(context)
-            NotificationOptions.clearData(context)
+//            ForegroundTaskOptions.clearData(context)
+//            NotificationOptions.clearData(context)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(nIntent)
