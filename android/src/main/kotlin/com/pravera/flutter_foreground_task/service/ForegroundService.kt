@@ -287,6 +287,7 @@ class ForegroundService: Service(), MethodChannel.MethodCallHandler {
 			}
 			startForeground(notificationOptions.serviceId, builder.build())
 		}
+		isRunningService = true
 	}
 
 	private fun stopForegroundService() {
