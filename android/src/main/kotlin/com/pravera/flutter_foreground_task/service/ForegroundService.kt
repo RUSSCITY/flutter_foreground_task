@@ -72,9 +72,9 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
 
     override fun onCreate() {
         super.onCreate()
+        preStartNotification()
         fetchDataFromPreferences()
         registerBroadcastReceiver()
-        preStartNotification()
 
         when (foregroundServiceStatus.action) {
             ForegroundServiceAction.START -> {
@@ -91,6 +91,7 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         fetchDataFromPreferences()
+        preStartNotification()
 
         when (foregroundServiceStatus.action) {
             ForegroundServiceAction.UPDATE -> {
