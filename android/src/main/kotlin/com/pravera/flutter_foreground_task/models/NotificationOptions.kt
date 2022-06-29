@@ -25,7 +25,7 @@ data class NotificationOptions(
     companion object {
         fun getData(context: Context): NotificationOptions {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS)
 
             val serviceId = 1000
             val channelId = prefs.getString(PrefsKey.NOTIFICATION_CHANNEL_ID, null) ?: ""
@@ -89,7 +89,7 @@ data class NotificationOptions(
 
         fun putData(context: Context, map: Map<*, *>?) {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS)
 
             val channelId = map?.get(PrefsKey.NOTIFICATION_CHANNEL_ID) as? String ?: ""
             val channelName = map?.get(PrefsKey.NOTIFICATION_CHANNEL_NAME) as? String ?: ""
@@ -137,7 +137,7 @@ data class NotificationOptions(
 
         fun updateContent(context: Context, map: Map<*, *>?) {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS)
 
             val contentTitle = map?.get(PrefsKey.NOTIFICATION_CONTENT_TITLE) as? String
                 ?: prefs.getString(PrefsKey.NOTIFICATION_CONTENT_TITLE, null)
@@ -155,7 +155,7 @@ data class NotificationOptions(
 
         fun clearData(context: Context) {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE)
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS)
 
             with (prefs.edit()) {
                 clear()

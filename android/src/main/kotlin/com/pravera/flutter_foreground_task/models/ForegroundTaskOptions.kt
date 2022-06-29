@@ -13,7 +13,7 @@ data class ForegroundTaskOptions(
     companion object {
         fun getData(context: Context): ForegroundTaskOptions {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS
             )
 
             val interval = prefs.getLong(PrefsKey.TASK_INTERVAL, 5000L)
@@ -41,7 +41,7 @@ data class ForegroundTaskOptions(
 
         fun putData(context: Context, map: Map<*, *>?) {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS
             )
 
             val interval = "${map?.get(PrefsKey.TASK_INTERVAL)}".toLongOrNull() ?: 5000L
@@ -65,7 +65,7 @@ data class ForegroundTaskOptions(
 
         fun updateCallbackHandle(context: Context, map: Map<*, *>?) {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS
             )
 
             val callbackHandle = "${map?.get(PrefsKey.CALLBACK_HANDLE)}".toLongOrNull()
@@ -82,7 +82,7 @@ data class ForegroundTaskOptions(
 
         fun clearData(context: Context) {
             val prefs = context.applicationContext.getSharedPreferences(
-                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_PRIVATE
+                PrefsKey.SERVICE_OPTIONS_PREFS_NAME, Context.MODE_MULTI_PROCESS
             )
 
             with(prefs.edit()) {
