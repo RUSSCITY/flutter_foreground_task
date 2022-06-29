@@ -9,6 +9,7 @@ import android.net.wifi.WifiManager
 import android.os.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.google.gson.Gson
 import com.pravera.flutter_foreground_task.models.ForegroundServiceStatus
 import com.pravera.flutter_foreground_task.models.ForegroundTaskOptions
 import com.pravera.flutter_foreground_task.models.NotificationOptions
@@ -257,6 +258,7 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
     private fun preStartNotification() {
         try {
             if (this::notificationOptions.isInitialized) {
+                Log.e(TAG, "notificationOptions: " + Gson().toJson(notificationOptions))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val channel = NotificationChannel(
                         notificationOptions.channelId,
