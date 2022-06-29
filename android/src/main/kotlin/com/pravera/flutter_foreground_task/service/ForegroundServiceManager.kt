@@ -29,11 +29,12 @@ class ForegroundServiceManager {
 			NotificationOptions.putData(context, argsMap)
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				context.startForegroundService(nIntent)
+//				context.startForegroundService(nIntent)
 			} else {
 				context.startService(nIntent)
 			}
 		} catch (e: Exception) {
+			e.printStackTrace()
 			return false
 		}
 
