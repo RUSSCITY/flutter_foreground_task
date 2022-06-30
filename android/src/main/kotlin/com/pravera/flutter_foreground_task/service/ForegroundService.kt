@@ -77,11 +77,11 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
         fetchDataFromPreferences()
         registerBroadcastReceiver()
         preStartNotification()
-        executeDartCallback(foregroundTaskOptions.callbackHandle)
 
         when (foregroundServiceStatus.action) {
             ForegroundServiceAction.START -> {
                 startForegroundService()
+                executeDartCallback(foregroundTaskOptions.callbackHandle)
             }
             ForegroundServiceAction.REBOOT -> {
                 startForegroundService()
