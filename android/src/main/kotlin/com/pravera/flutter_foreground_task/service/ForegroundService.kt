@@ -92,10 +92,13 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        preStartNotification()
         fetchDataFromPreferences()
 
         when (foregroundServiceStatus.action) {
+            ForegroundServiceAction.START -> {
+                startForegroundService()
+                executeDartCallback(foregroundTaskOptions.callbackHandle)
+            }
             ForegroundServiceAction.UPDATE -> {
                 startForegroundService()
                 executeDartCallback(foregroundTaskOptions.callbackHandle)
