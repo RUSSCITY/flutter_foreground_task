@@ -16,7 +16,7 @@ To use this plugin, add `flutter_foreground_task` as a [dependency in your pubsp
 
 ```yaml
 dependencies:
-  flutter_foreground_task: ^3.7.3
+  flutter_foreground_task: ^3.8.1
 ```
 
 After adding the `flutter_foreground_task` plugin to the flutter project, we need to specify the permissions and services to use for this plugin to work properly.
@@ -303,17 +303,22 @@ class _ExamplePageState extends State<ExamplePage> {
     // You can save data using the saveData function.
     await FlutterForegroundTask.saveData(key: 'customData', value: 'hello');
 
-    ReceivePort? receivePort;
+    bool reqResult;
     if (await FlutterForegroundTask.isRunningService) {
-      receivePort = await FlutterForegroundTask.restartService();
+      reqResult = await FlutterForegroundTask.restartService();
     } else {
-      receivePort = await FlutterForegroundTask.startService(
+      reqResult = await FlutterForegroundTask.startService(
         notificationTitle: 'Foreground Service is running',
         notificationText: 'Tap to return to the app',
         callback: startCallback,
       );
     }
 
+    ReceivePort? receivePort;
+    if (reqResult) {
+      receivePort = await FlutterForegroundTask.receivePort;
+    }
+ 
     return _registerReceivePort(receivePort);
   }
 
@@ -748,6 +753,26 @@ Open the settings page where you can allow/deny the "android.permission.SYSTEM_A
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
 Future<bool> function() => FlutterForegroundTask.openSystemAlertWindowSettings();
+```
+
+### :lollipop: isAppOnForeground (Both)
+
+Returns whether the app is in the foreground.
+
+```dart
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+
+Future<bool> function() => FlutterForegroundTask.isAppOnForeground;
+```
+
+### :lollipop: setOnLockScreenVisibility (Android)
+
+Toggles lockScreen visibility.
+
+```dart
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+
+void function() => FlutterForegroundTask.setOnLockScreenVisibility(true);
 ```
 
 ## Support
