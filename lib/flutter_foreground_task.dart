@@ -181,6 +181,7 @@ class FlutterForegroundTask {
   /// Get the stored data with [key].
   static Future<T?> getData<T>({required String key}) async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     final prefsKey = _kPrefsKeyPrefix + key;
     final value = prefs.get(prefsKey);
 
@@ -192,6 +193,7 @@ class FlutterForegroundTask {
     final dataList = <String, Object>{};
 
     final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     for (final key in prefs.getKeys()) {
       if (key.contains(_kPrefsKeyPrefix)) {
         final value = prefs.get(key);
@@ -211,6 +213,7 @@ class FlutterForegroundTask {
     required Object value,
   }) async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     final prefsKey = _kPrefsKeyPrefix + key;
 
     if (value is int) {
