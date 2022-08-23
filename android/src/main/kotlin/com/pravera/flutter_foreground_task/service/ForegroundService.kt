@@ -81,7 +81,6 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
 		when (foregroundServiceStatus.action) {
 			ForegroundServiceAction.START -> {
 				startForegroundService()
-				executeDartCallback(foregroundTaskOptions.callbackHandle)
 			}
 			ForegroundServiceAction.REBOOT -> {
 				startForegroundService()
