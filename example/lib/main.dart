@@ -8,6 +8,7 @@ void main() => runApp(const ExampleApp());
 // The callback function should always be a top-level function.
 void startCallback() {
   // The setTaskHandler function must be called to handle the task in the background.
+  print("startCallback");
   FlutterForegroundTask.setTaskHandler(MyTaskHandler());
 }
 
@@ -28,9 +29,8 @@ class MyTaskHandler extends TaskHandler {
   @override
   Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {
     FlutterForegroundTask.updateService(
-      notificationTitle: 'MyTaskHandler',
-      notificationText: 'eventCount: $_eventCount'
-    );
+        notificationTitle: 'MyTaskHandler',
+        notificationText: 'eventCount: $_eventCount');
 
     // Send data to the main isolate.
     sendPort?.send(_eventCount);
